@@ -13,4 +13,8 @@ node 'vagrant-trusty64' {
     package { ['python-dev', 'build-essential']:
         ensure => present
     }
+
+    package { 'git':
+        ensure => present
+    }
 }

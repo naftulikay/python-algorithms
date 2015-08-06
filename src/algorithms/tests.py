@@ -35,3 +35,30 @@ class AlgorithmsTestCase(unittest.TestCase):
         algorithms.bubble_sort(collection)
 
         self.assertEqual(collection, ['a', 'b', 'c'])
+
+        # test worst case with 10 ints
+        worst = [i for i in xrange(9, -1, -1)]
+
+        algorithms.bubble_sort(worst)
+
+        self.assertEqual([i for i in xrange(0, 10)], worst)
+
+    
+    def test_insertion_sort(self):
+        """
+        Tests the insertion sort algorithm implementation.
+        """
+        
+        collection = [5, 1, 10, 2, 16, 1]
+
+        algorithms.insertion_sort(collection)
+
+        self.assertEqual(collection, [1, 1, 2, 5, 10, 16])
+
+        # test worst case with 10 ints
+        collection = [i for i in xrange(9, -1, -1)]
+
+        algorithms.bubble_sort(collection)
+
+        self.assertEqual([i for i in xrange(0, 10)], collection)
+
