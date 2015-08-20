@@ -1,0 +1,11 @@
+.vagrant
+
+*.pyc
+*.pyo
+
+bin
+parts
+eggs
+develop-eggs
+.installed.cfg
+src/*.egg-info
