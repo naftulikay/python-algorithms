@@ -116,6 +116,12 @@ def heap_sort(collection):
 def heap_sift_down(collection, start, n = None):
     """
     Sifts down a collection which is desired to be in a heap format.
+
+    Arguments:
+    collection: The heapified collection to sift down.
+    start: The start index to begin the sift from.
+    n: The maximum non-inclusive limit of how far to go into the collection. If not provided, it defaults
+       to the length of the collection.
     """
     if n is None:
         n = len(collection)
@@ -152,6 +158,8 @@ def heap_sift_down(collection, start, n = None):
 def heapify(collection):
     """
     Converts a collection of sortable items into a heap.
+
+    The heap
     """
     n = len(collection)
 
