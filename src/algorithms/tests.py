@@ -2,13 +2,63 @@
 # -*- coding: utf-8 -*-
 
 import algorithms
+import logging
 import unittest
 
+logging.basicConfig(level=logging.DEBUG)
+
+logger = logging.getLogger('algorithms.tests')
 
 class AlgorithmsTestCase(unittest.TestCase):
     """
     Test cases for algorithm compatibility.
     """
+
+    def test_swap(self):
+        """Tests that the swap method swaps indices in-place in a collection."""
+        # test simple forward swap
+        collection = [4, 3]
+        algorithms.swap(collection, 1, 0)
+        self.assertEqual([3, 4], collection)
+
+        # test reverse swap
+        collection = [10, 5]
+        algorithms.swap(collection, 0, 1)
+        self.assertEqual([5, 10], collection)
+
+        # test big difference swap
+        collection = [i for i in xrange(0, 100)]
+        algorithms.swap(collection, 95, 5)
+
+        expected = [i for i in xrange(0, 100)]
+        expected[95] = 5
+        expected[5] = 95
+
+        self.assertEqual(expected, collection)
+
+        # test out of bounds
+        collection = [i for i in xrange(0, 10)]
+
+        try:
+            algorithms.swap(collection, 3, 100)
+            self.fail("the algorithm failed to raise an IndexError on out of bounds access")
+        except IndexError as e:
+            logger.debug("successfully threw error: %s", e)
+
+        # test negative indices
+        collection = [0, 1, 2]
+        algorithms.swap(collection, -1, -2)
+        self.assertEqual([0, 2, 1], collection)
+
+        # test negative indices out of bounds
+        collection = [i for i in xrange(0, 10)]
+
+        try:
+            algorithms.swap(collection, -1, -11)
+            self.fail("the algorithm failed to raise an IndexError on negative out of bounds")
+        except IndexError as e:
+            logger.debug("successfully threw error: %s", e)
+
 
     def test_bubble_sort(self):
         """
@@ -48,7 +98,6 @@ class AlgorithmsTestCase(unittest.TestCase):
         """
         Tests the insertion sort algorithm implementation.
         """
-
         collection = [5, 1, 10, 2, 16, 1]
 
         algorithms.insertion_sort(collection)
@@ -61,6 +110,50 @@ class AlgorithmsTestCase(unittest.TestCase):
         algorithms.bubble_sort(collection)
 
         self.assertEqual([i for i in xrange(0, 10)], collection)
+
+
+    def test_heap_sort(self):
+        """
+        Tests the heap sort algorithm implementation.
+        """
+        # test random case
+        collection = [5, 1, 10, 2, 16, 1]
+
+        algorithms.heap_sort(collection)
+
+        self.assertEqual([1, 1, 2, 5, 10, 16], collection)
+
+        # test worst case
+        collection = [i for i in reversed(xrange(0, 10))]
+
+        algorithms.heap_sort(collection)
+
+        self.assertEqual([i for i in xrange(0, 10)], collection)
+
+        # test a huge array worst case
+        collection = [i for i in reversed(xrange(0, 1000))]
+        algorithms.heap_sort(collection)
+        self.assertEqual([i for i in xrange(0, 1000)], collection)
+
+    @unittest.skip("not implemented")
+    def test_heapify(self):
+        """
+        Tests the heapify algorithm implementation.
+        """
+        self.fail("not implemented")
+
+    @unittest.skip("not implemented")
+    def test_heap_sift_down(self):
+        """
+        Tests that sifting down a heapified collection works as planned.
+        """
+        self.fail("not implemented")
+
+
+class MathTestCase(unittest.TestCase):
+    """
+    Test case for math formulae, comparing them with actual results.
+    """
 
 
     def test_assumption_crawl_forward(self):
