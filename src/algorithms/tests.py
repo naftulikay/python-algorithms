@@ -27,17 +27,17 @@ class AlgorithmsTestCase(unittest.TestCase):
         self.assertEqual([5, 10], collection)
 
         # test big difference swap
-        collection = [i for i in xrange(0, 100)]
+        collection = [i for i in range(0, 100)]
         algorithms.swap(collection, 95, 5)
 
-        expected = [i for i in xrange(0, 100)]
+        expected = [i for i in range(0, 100)]
         expected[95] = 5
         expected[5] = 95
 
         self.assertEqual(expected, collection)
 
         # test out of bounds
-        collection = [i for i in xrange(0, 10)]
+        collection = [i for i in range(0, 10)]
 
         try:
             algorithms.swap(collection, 3, 100)
@@ -51,7 +51,7 @@ class AlgorithmsTestCase(unittest.TestCase):
         self.assertEqual([0, 2, 1], collection)
 
         # test negative indices out of bounds
-        collection = [i for i in xrange(0, 10)]
+        collection = [i for i in range(0, 10)]
 
         try:
             algorithms.swap(collection, -1, -11)
@@ -87,11 +87,11 @@ class AlgorithmsTestCase(unittest.TestCase):
         self.assertEqual(collection, ['a', 'b', 'c'])
 
         # test worst case with 10 ints
-        worst = [i for i in xrange(9, -1, -1)]
+        worst = [i for i in range(9, -1, -1)]
 
         algorithms.bubble_sort(worst)
 
-        self.assertEqual([i for i in xrange(0, 10)], worst)
+        self.assertEqual([i for i in range(0, 10)], worst)
 
 
     def test_insertion_sort(self):
@@ -105,11 +105,11 @@ class AlgorithmsTestCase(unittest.TestCase):
         self.assertEqual(collection, [1, 1, 2, 5, 10, 16])
 
         # test worst case with 10 ints
-        collection = [i for i in xrange(9, -1, -1)]
+        collection = [i for i in range(9, -1, -1)]
 
         algorithms.bubble_sort(collection)
 
-        self.assertEqual([i for i in xrange(0, 10)], collection)
+        self.assertEqual([i for i in range(0, 10)], collection)
 
 
     def test_heap_sort(self):
@@ -124,16 +124,16 @@ class AlgorithmsTestCase(unittest.TestCase):
         self.assertEqual([1, 1, 2, 5, 10, 16], collection)
 
         # test worst case
-        collection = [i for i in reversed(xrange(0, 10))]
+        collection = [i for i in reversed(range(0, 10))]
 
         algorithms.heap_sort(collection)
 
-        self.assertEqual([i for i in xrange(0, 10)], collection)
+        self.assertEqual([i for i in range(0, 10)], collection)
 
         # test a huge array worst case
-        collection = [i for i in reversed(xrange(0, 1000))]
+        collection = [i for i in reversed(range(0, 1000))]
         algorithms.heap_sort(collection)
-        self.assertEqual([i for i in xrange(0, 1000)], collection)
+        self.assertEqual([i for i in range(0, 1000)], collection)
 
     @unittest.skip("not implemented")
     def test_heapify(self):
@@ -162,8 +162,8 @@ class MathTestCase(unittest.TestCase):
 
         This test concerns cases like this:
 
-            for i in xrange(0, n):
-                for j in xrange(i + 1, n):
+            for i in range(0, n):
+                for j in range(i + 1, n):
                     o(1)
 
         How many iterations total will be run for this equation? Conventional knowledge tells us that the mathematical
@@ -186,8 +186,8 @@ class MathTestCase(unittest.TestCase):
             """
             count = 0
 
-            for i in xrange(0, n):
-                for j in xrange(i + 1, n):
+            for i in range(0, n):
+                for j in range(i + 1, n):
                     count += 1
 
             return count
@@ -199,8 +199,8 @@ class MathTestCase(unittest.TestCase):
             """
             count = 0
 
-            for i in xrange(0, n):
-                for j in reversed(xrange(0, i)): # remember that xrange is NON-INCLUSIVE, therefore we're going to i - 1
+            for i in range(0, n):
+                for j in reversed(range(0, i)): # remember that range is NON-INCLUSIVE, therefore we're going to i - 1
                     count += 1
 
             return count
