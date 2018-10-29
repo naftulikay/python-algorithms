@@ -106,7 +106,7 @@ def heap_sort(collection):
 
     # now that we have a heap data structure in-place in the collection, iterate backwards through
     # the collection, sorting based on the properties of a heap
-    for i in reversed(xrange(0, n)):
+    for i in reversed(range(0, n)):
         # index 0 is the largest value, swap it in front of the sorted elements.
         swap(collection, i, 0)
         # the swap broke the heap property, so fix it using a sift down.
@@ -168,7 +168,7 @@ def heapify(collection):
     middle = floor((n - 2) / 2.0)
 
     # iterate from the middle of the array downward to zero
-    for i in reversed(xrange(0, int(middle + 1))): # non inclusive, so go one further!
+    for i in reversed(range(0, int(middle + 1))): # non inclusive, so go one further!
         # repair the heap whose root is at i. we assume that the heaps rooted at its children are
         # valid.
         heap_sift_down(collection, i)
