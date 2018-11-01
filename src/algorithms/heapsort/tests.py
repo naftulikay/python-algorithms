@@ -2,19 +2,20 @@
 # -*- coding: utf-8 -*-
 
 from algorithms.heapsort import (
+        heap_parent,
+        heap_left_child,
+        heap_right_child,
         heap_sift_down,
         heap_sift_up,
-        heapify_max_in_place,
+        heapify,
         heapsort,
-        heapsort_in_place,
 )
-
-from random import SystemRandom; random = SystemRandom()
 
 import unittest
 
 
-class HeapsortTestCase(unittest.TestCase):
+class HeapSortTestCase(unittest.TestCase):
+    """Heap sort tests."""
 
     def test_heap_sift_up(self):
         """Sift up must move a value up the heap as long as a condition is met."""
@@ -26,70 +27,67 @@ class HeapsortTestCase(unittest.TestCase):
         # now, we are at index 1, which replaces index 0, so [4, 0, 2, 3, 1]
         self.assertEqual([4, 0, 2, 3, 1], data)
 
-    def test_heap_sift_down(self):
-        """Sift down must correct the heap property downward with an upper bound for the last index."""
-        data = [0, 1, 2, 3, 4]
-        # sift down with no upper bound
-        heap_sift_down(data, 1)
+    def test_sift_down_limitless(self):
+        # sifts here (note: the right child is always preferred in our example above)
+        #   - start                (0, 1, 2, 3, 4, 5)
+        #   - swap indices 0 and 2 (2, 1, 0, 3, 4, 5)
+        #   - swap indices 2 and 5 (2, 1, 5, 3, 4, 0)
+        self.assertEqual([2, 1, 5, 3, 4, 0], heap_sift_down([0, 1, 2, 3, 4, 5], 0))
 
-        # data[1] (1), left child data[3] (3), swap to: [0, 3, 1, 2, 1, 4]
-        self.assertEqual([0, 3, 2, 1, 4], data)
+    def test_sift_down_limited(self):
+        # sifts here (note: the right child is always preferred in our example above)
+        #   - start                (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...)
+        #   - swap indices 0 and 2 (2, 1, 0, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...)
+        #   - swap indices 2 and 6 (2, 1, 6, 3, 4, 5, 0, 7, 8, 9, 10, 11, ...)
+        self.assertEqual(
+            [2, 1, 6, 3, 4, 5, 0, 7, 8, 9, 10, 11, 12, 13, 14, 15], 
+            heap_sift_down(list(range(16)), 0, 10),
+        )
 
-    def test_heap_sift_down_limit(self):
-        """Sift down with an explicit end cap."""
-        data = [0, 1, 2, 3, 4, 5]
-        # sift down with an explicit upper bound
-        heap_sift_down(data, 0, 2)
+    def test_sift_down_start(self):
+        # sifts here (note: the right child is always preferred in our example above)
+        #   - start (index 3)      (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...)
+        #   - swap indices 3 and 8 (0, 1, 2, 8, 4, 5, 6, 7, 3, 9, 10, 11, ...)
+        self.assertEqual(
+            [0, 1, 2, 8, 4, 5, 6, 7, 3, 9, 10, 11, 12, 13, 14, 15],
+            heap_sift_down(list(range(16)), 3),
+        )
 
-        # data[0] (1), left child data[1] (1)
-        self.assertEqual([1, 0, 2, 3, 4, 5], data)
+    def test_heapify(self):
+        data = heapify([2, 5, 3, 17, 8, 12])
 
-    def test_heapify_max_in_place(self):
-        """Create a max heap in-place in an array."""
-        data = [int(random.random() * 100) for _ in range(100)]
+        for start in reversed(range(len(data))):
+            current = start
+            # walk upward evaluating the heap property
+            while current > 0:
+                parent = heap_parent(current)
+                self.assertGreaterEqual(data[parent], data[current],
+                    "Heap property invalid at {:d} (parent {:d})".format(current, parent))
 
-        heapify_max_in_place(data)
+                current = parent
 
-        for i in reversed(range(len(data))):
-            parent_i = int((i - 1) / 2)
-            value, parent = data[i], data[parent_i]
+        # prove by implementation details
+        # heapify(2, 5, 3, 17, 8, 12)
+        #     heap_sift_down(data, 3)
+        #         start: [2, 5, 3, 17, 8, 12]
+        #
+        self.assertEqual(
+            [17, 8, 12, 5, 2, 3], 
+            data
+        )
 
-            if value > parent:
-                self.fail("Heap property does not hold (index: {}, parent_index: {}), value: {}, parent: {}".format(
-                    i, parent_i, value, parent))
-
-    @unittest.skip
-    def test_heapsort_in_place_random(self):
-        """Sort a randomized array in place using heapsort."""
-        data = [int(random.random() * 100) for _ in range(100)]
-
-        heapsort_in_place(data)
-
-        for i in range(1, len(data)):
-            if data[i - 1] > data[i]:
-                self.fail("Array not in sorted order.")
-
-    @unittest.skip
-    def test_heapsort_in_place(self):
-        """Sort an array in place using heapsort."""
-        data = [10, 9, 7, 6, 2, 1]
-
-        heapsort_in_place(data)
-
-        self.assertEqual([1, 2, 6, 7, 9, 10], data)
-
-    @unittest.skip
     def test_heapsort(self):
-        """Sort an array without side-effects using heapsort."""
-        data = [int(random.random() * 100) for _ in range(100)]
-        copy = [value for value in data]
+        self.assertEqual([0, 1, 2, 3, 4, 5], heapsort(list(reversed(range(6)))))
 
-        result = heapsort(data)
+    def test_heap_left_child(self):
+        self.assertEqual(1, heap_left_child(0))
+        self.assertEqual(3, heap_left_child(1))
 
-        for i in range(1, len(result)):
-            if result[i - 1] > result[i]:
-                self.fail("Array not in sorted order.")
+    def test_heap_right_child(self):
+        self.assertEqual(2, heap_right_child(0))
+        self.assertEqual(4, heap_right_child(1))
 
-        for i, value in enumerate(data):
-            if data[i] != copy[i]:
-                self.fail("Array destroyed.")
+    def test_heap_parent(self):
+        self.assertEqual(0, heap_parent(0))
+        self.assertEqual(2, heap_parent(5))
+        self.assertEqual(2, heap_parent(6))
