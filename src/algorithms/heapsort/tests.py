@@ -40,7 +40,7 @@ class HeapSortTestCase(unittest.TestCase):
         #   - swap indices 0 and 2 (2, 1, 0, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...)
         #   - swap indices 2 and 6 (2, 1, 6, 3, 4, 5, 0, 7, 8, 9, 10, 11, ...)
         self.assertEqual(
-            [2, 1, 6, 3, 4, 5, 0, 7, 8, 9, 10, 11, 12, 13, 14, 15], 
+            [2, 1, 6, 3, 4, 5, 0, 7, 8, 9, 10, 11, 12, 13, 14, 15],
             heap_sift_down(list(range(16)), 0, 10),
         )
 
@@ -72,7 +72,7 @@ class HeapSortTestCase(unittest.TestCase):
         #         start: [2, 5, 3, 17, 8, 12]
         #
         self.assertEqual(
-            [17, 8, 12, 5, 2, 3], 
+            [17, 8, 12, 5, 2, 3],
             data
         )
 
